@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-
+import { useForm, SubmitHandler } from 'react-hook-form'
+import * as yup from 'yup'
 import '@ionic/react/css/core.css';
 import { refreshOutline, swapVerticalOutline } from 'ionicons/icons'
 
@@ -21,11 +22,21 @@ import './theme/variables.css';
 import { IonApp, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonRadio, IonRadioGroup, IonRow, IonTitle, IonToolbar, setupIonicReact } from '@ionic/react';
 
 
-
 setupIonicReact();
 
 
 const App: React.FC = () => {
+  const schema = yup.object().shape({
+    firstname: yup.string().required(),
+    lastname: yup.string().required(),
+    email: yup.string().email().required(),
+    age: yup.number().required().positive().min(21).integer(),
+  })
+
+  const onSubmit: SubmitHandler<Person> = (data) => {
+    console.log(data)
+  }
+  const { register, handleSubmit } = useForm<Person>()
   enum Countries {
     India = 'India',
     Usa = 'Usa',
@@ -55,6 +66,7 @@ const App: React.FC = () => {
     year: number;
     gender: Gender;
     country: Countries;
+    phone: number;
     employed: boolean;
   }
 
@@ -72,7 +84,7 @@ const App: React.FC = () => {
 
       <IonContent className='ion-padding'>
         {/* Content Body */}
-
+        <form onSubmit={handleSubmit(onSubmit)}></form>
         <IonGrid>
 
           <IonRow>
@@ -82,7 +94,7 @@ const App: React.FC = () => {
                 <IonLabel position="floating">
                   First Name
                 </IonLabel>
-                <IonInput></IonInput>
+                <IonInput {...register('firstname')}></IonInput>
               </IonItem>
             </IonCol>
             <IonCol>
@@ -90,7 +102,7 @@ const App: React.FC = () => {
                 <IonLabel position="floating">
                   Last Name
                 </IonLabel>
-                <IonInput></IonInput>
+                <IonInput {...register('lastname')}></IonInput>
               </IonItem>
             </IonCol>
 
@@ -102,7 +114,7 @@ const App: React.FC = () => {
                 <IonLabel position="floating">
                   Email Address
                 </IonLabel>
-                <IonInput></IonInput>
+                <IonInput {...register('email')}></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
@@ -114,7 +126,7 @@ const App: React.FC = () => {
                 <IonLabel position="floating">
                   Phone Number
                 </IonLabel>
-                <IonInput></IonInput>
+                <IonInput {...register('phone')}></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
@@ -126,7 +138,7 @@ const App: React.FC = () => {
                 <IonLabel position="floating">
                   Year of Birth
                 </IonLabel>
-                <IonInput></IonInput>
+                <IonInput {...register('age')}></IonInput>
               </IonItem>
             </IonCol>
 
@@ -135,7 +147,7 @@ const App: React.FC = () => {
                 <IonLabel position="floating">
                   Country
                 </IonLabel>
-                <IonInput></IonInput>
+                <IonInput {...register('country')}></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
@@ -150,19 +162,19 @@ const App: React.FC = () => {
               <IonCol>
                 <IonItem>
                   <IonLabel>Male</IonLabel>
-                  <IonRadio slot="start" value="male" />
+                  <IonRadio {...register('gender')} slot="start" value="male" />
                 </IonItem>
               </IonCol>
               <IonCol>
                 <IonItem>
                   <IonLabel>Female</IonLabel>
-                  <IonRadio slot="start" value="female" />
+                  <IonRadio {...register('gender')} slot="start" value="female" />
                 </IonItem>
               </IonCol>
               <IonCol>
                 <IonItem>
                   <IonLabel>other</IonLabel>
-                  <IonRadio slot="start" value="other" />
+                  <IonRadio {...register('gender')} slot="start" value="other" />
                 </IonItem>
               </IonCol>
             </IonRow>
@@ -173,13 +185,13 @@ const App: React.FC = () => {
               <IonCol>
                 <IonItem>
                   <IonLabel>Employed</IonLabel>
-                  <IonRadio slot="start" value={true} />
+                  <IonRadio {...register('employed')} slot="start" value={true} />
                 </IonItem>
               </IonCol>
               <IonCol>
                 <IonItem>
                   <IonLabel>UnEmployed</IonLabel>
-                  <IonRadio slot="start" value={false} />
+                  <IonRadio {...register('employed')} slot="start" value={false} />
                 </IonItem>
               </IonCol>
             </IonRow>
