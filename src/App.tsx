@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import '@ionic/react/css/core.css';
 import { refreshOutline, swapVerticalOutline } from 'ionicons/icons'
@@ -31,13 +32,21 @@ const App: React.FC = () => {
     lastname: yup.string().required(),
     email: yup.string().email().required(),
     age: yup.number().required().positive().min(21).integer(),
+    country: yup.string().required(),
+    gender: yup.string().required(),
+    phone: yup.number().required(),
+    employed: yup.string().required(),
   })
 
   const onSubmit: SubmitHandler<Person> = (data) => {
     console.log(data)
+    console.log('Hello')
+
   }
-  const { register, handleSubmit } = useForm<Person>()
-  enum Countries {
+  const { register, handleSubmit } = useForm<Person>({
+    resolver: yupResolver(schema),
+  })
+  enum country {
     India = 'India',
     Usa = 'Usa',
     Unitedkingdom = 'Unitedkingdom',
@@ -49,23 +58,21 @@ const App: React.FC = () => {
     Sweden = 'Sweden',
   }
 
-  enum Gender {
+  enum gender {
     male = 'male',
     female = 'female',
     other = 'other'
   }
 
-  const [emp, setEmp] = useState(false)
-  const [gender, setGender] = useState('')
+
 
   interface Person {
     firstname: string;
     lastname: string;
     age: number;
     email: string;
-    year: number;
-    gender: Gender;
-    country: Countries;
+    gender: gender;
+    country: country;
     phone: number;
     employed: boolean;
   }
@@ -84,140 +91,142 @@ const App: React.FC = () => {
 
       <IonContent className='ion-padding'>
         {/* Content Body */}
-        <form onSubmit={handleSubmit(onSubmit)}></form>
-        <IonGrid>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <IonGrid>
 
-          <IonRow>
+            <IonRow>
 
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  First Name
-                </IonLabel>
-                <IonInput {...register('firstname')}></IonInput>
-              </IonItem>
-            </IonCol>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  Last Name
-                </IonLabel>
-                <IonInput {...register('lastname')}></IonInput>
-              </IonItem>
-            </IonCol>
+              <IonCol>
+                <IonItem>
+                  <IonLabel position="floating">
+                    First Name
+                  </IonLabel>
+                  <IonInput {...register('firstname')}></IonInput>
+                </IonItem>
+              </IonCol>
+              <IonCol>
+                <IonItem>
+                  <IonLabel position="floating">
+                    Last Name
+                  </IonLabel>
+                  <IonInput {...register('lastname')}></IonInput>
+                </IonItem>
+              </IonCol>
 
-          </IonRow>
+            </IonRow>
 
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  Email Address
-                </IonLabel>
-                <IonInput {...register('email')}></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-
-
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  Phone Number
-                </IonLabel>
-                <IonInput {...register('phone')}></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-
-
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  Year of Birth
-                </IonLabel>
-                <IonInput {...register('age')}></IonInput>
-              </IonItem>
-            </IonCol>
-
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  Country
-                </IonLabel>
-                <IonInput {...register('country')}></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-
-          <IonRadioGroup value={gender} onIonChange={e => setGender(e.detail.value)}>
             <IonRow>
               <IonCol>
                 <IonItem>
-                  <IonLabel>Gender</IonLabel>
-                </IonItem>
-              </IonCol>
-              <IonCol>
-                <IonItem>
-                  <IonLabel>Male</IonLabel>
-                  <IonRadio {...register('gender')} slot="start" value="male" />
-                </IonItem>
-              </IonCol>
-              <IonCol>
-                <IonItem>
-                  <IonLabel>Female</IonLabel>
-                  <IonRadio {...register('gender')} slot="start" value="female" />
-                </IonItem>
-              </IonCol>
-              <IonCol>
-                <IonItem>
-                  <IonLabel>other</IonLabel>
-                  <IonRadio {...register('gender')} slot="start" value="other" />
+                  <IonLabel position="floating">
+                    Email Address
+                  </IonLabel>
+                  <IonInput {...register('email')}></IonInput>
                 </IonItem>
               </IonCol>
             </IonRow>
-          </IonRadioGroup>
 
-          <IonRadioGroup value={emp} onIonChange={e => setEmp(e.detail.value)}>
+
             <IonRow>
               <IonCol>
                 <IonItem>
-                  <IonLabel>Employed</IonLabel>
-                  <IonRadio {...register('employed')} slot="start" value={true} />
-                </IonItem>
-              </IonCol>
-              <IonCol>
-                <IonItem>
-                  <IonLabel>UnEmployed</IonLabel>
-                  <IonRadio {...register('employed')} slot="start" value={false} />
+                  <IonLabel position="floating">
+                    Phone Number
+                  </IonLabel>
+                  <IonInput {...register('phone')}></IonInput>
                 </IonItem>
               </IonCol>
             </IonRow>
-          </IonRadioGroup>
 
-          <IonRow>
 
-            <IonCol className='ion-text-left'>
-              <IonButton>
-                <IonIcon slot='start' icon={swapVerticalOutline} />
-                Store Data
+            <IonRow>
+              <IonCol>
+                <IonItem>
+                  <IonLabel position="floating">
+                    Age
+                  </IonLabel>
+                  <IonInput {...register('age')}></IonInput>
+                </IonItem>
+              </IonCol>
 
-              </IonButton>
-            </IonCol>
+              <IonCol>
+                <IonItem>
+                  <IonLabel position="floating">
+                    Country
+                  </IonLabel>
+                  <IonInput {...register('country')}></IonInput>
+                </IonItem>
+              </IonCol>
+            </IonRow>
 
-            <IonCol className='ion-text-right'>
-              <IonButton>
-                <IonIcon slot='start' icon={refreshOutline} />
-                Reset
-              </IonButton>
-            </IonCol>
+            <IonRadioGroup value={{ ...register('gender') }}>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>gender</IonLabel>
+                  </IonItem>
+                </IonCol>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>Male</IonLabel>
+                    <IonRadio slot="start" value="male" {...register('gender')} />
+                  </IonItem>
+                </IonCol>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>Female</IonLabel>
+                    <IonRadio slot="start" value="female" {...register('gender')} />
+                  </IonItem>
+                </IonCol>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>other</IonLabel>
+                    <IonRadio slot="start" value="other" {...register('gender')} />
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+            </IonRadioGroup>
 
-          </IonRow>
+            <IonRadioGroup value={{ ...register('employed') }}>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>Employed</IonLabel>
+                    <IonRadio slot="start" {...register('employed')} value={true} />
+                  </IonItem>
+                </IonCol>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>UnEmployed</IonLabel>
+                    <IonRadio slot="start" {...register('employed')} value={false} />
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+            </IonRadioGroup>
 
-        </IonGrid>
+            <IonRow>
+
+              <IonCol className='ion-text-left'>
+                <IonButton type='submit'>
+                  <IonIcon slot='start' icon={swapVerticalOutline} />
+                  Store Data
+
+                </IonButton>
+              </IonCol>
+
+              <IonCol className='ion-text-right'>
+                <IonButton>
+                  <IonIcon slot='start' icon={refreshOutline} />
+                  Reset
+                </IonButton>
+              </IonCol>
+
+            </IonRow>
+
+          </IonGrid>
+        </form>
         {/* Content Body */}
+
       </IonContent>
 
       {/* Main App Body Ends */}
