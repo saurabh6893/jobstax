@@ -1,4 +1,6 @@
 import React from 'react'
+import './theme/style.css'
+// import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -21,6 +23,9 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { IonApp, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonRadio, IonRadioGroup, IonRow, IonTitle, IonToolbar, setupIonicReact } from '@ionic/react';
+import Display from './Display';
+
+// const navigate = useNavigate();
 
 
 setupIonicReact();
@@ -40,8 +45,7 @@ const App: React.FC = () => {
 
   const onSubmit: SubmitHandler<Person> = (data) => {
     console.log(data)
-    console.log('Hello')
-
+    // navigate('/Display');
   }
   const { register, handleSubmit } = useForm<Person>({
     resolver: yupResolver(schema),
@@ -65,7 +69,6 @@ const App: React.FC = () => {
   }
 
 
-
   interface Person {
     firstname: string;
     lastname: string;
@@ -80,6 +83,7 @@ const App: React.FC = () => {
   return (
 
     <IonApp>
+
       {/* Main App Body  Starts */}
       <IonHeader>
         <IonToolbar>
@@ -231,6 +235,8 @@ const App: React.FC = () => {
 
       {/* Main App Body Ends */}
     </IonApp >
+
+
   )
 }
 

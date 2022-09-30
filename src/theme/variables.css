@@ -239,7 +239,3 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
-
-body {
-  min-width: 600px;
-}
